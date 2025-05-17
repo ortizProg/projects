@@ -1,0 +1,73 @@
+<div class="col-md-12">
+  <h2 mat-dialog-title>{{!id ? 'Creación de usuarios' : 'Actualizar Usuario'}}</h2>
+  <div mat-dialog-content class="p-5">
+    <form [formGroup]="formCreateUser" *ngIf="formCreateUser" >
+      <div class="row">
+        <!-- Nombre field -->
+        <div class="col-md-6">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" />
+          </mat-form-field>
+        </div>
+
+        <!-- Email field -->
+        <div class="col-md-6">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Correo electrónico</mat-label>
+            <input matInput formControlName="email" />
+          </mat-form-field>
+        </div>
+
+        <!-- Password field -->
+        <div *ngIf="!id" class="col-md-6">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input type="password" matInput formControlName="password" />
+            @if (formCreateUser.hasError('passwordMismatch')) {
+              <mat-error>
+                Las contraseñas no coinciden
+              </mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <!-- Confirm Password field -->
+        <div *ngIf="!id" class="col-md-6">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Confirmar contraseña</mat-label>
+            <input type="password" matInput formControlName="confirmPassword" />
+          </mat-form-field>
+        </div>
+
+        <!-- Rol field -->
+        <div class="col-md-6">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Rol</mat-label>
+            <mat-select formControlName="rol_id" (selectionChange)="onChangeRole($event.value)">
+              <mat-option value="">Seleccionar</mat-option>
+              <mat-option value="1">Administrador</mat-option>
+              <mat-option value="2">Usuario</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <!-- Administrador field -->
+        <div *ngIf="showFieldAdministrator" class="col-md-6">
+          <mat-form-field class="w-100" appearance="outline">
+            <mat-label>Administrador</mat-label>
+            <mat-select formControlName="administrador_id">
+              @for(item of administratorValues; track $index) {
+                <mat-option [value]="item.id">{{item.nombre}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+  <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close>Cancelar</button>
+      <button mat-button cdkFocusInitial [disabled]="formCreateUser.invalid" (click)="onSubmit()">{{!id ? 'Crear' : 'Actualizar'}}</button>
+  </mat-dialog-actions>
+</div>

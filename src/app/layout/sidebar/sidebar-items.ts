@@ -14,7 +14,7 @@ export const ROUTES: RouteInfo[] = [
     rolAuthority: [ROLES.ADMIN, ROLES.USER]
   },
   {
-    path: '/page/projects',
+    path: '/pages/projects',
     title: 'Gestión de proyectos',
     iconType: 'material-icons-outlined',
     icon: 'assessment',
@@ -24,9 +24,9 @@ export const ROUTES: RouteInfo[] = [
     badgeClass: '',
     submenu: [],
     rolAuthority: [ROLES.ADMIN]
-  },  
+  },
   {
-    path: '/page/users',
+    path: '/pages/users',
     title: 'Gestión de usuarios',
     iconType: 'material-icons-outlined',
     icon: 'assessment',
@@ -48,5 +48,5 @@ export const ROUTES: RouteInfo[] = [
     badgeClass: '',
     submenu: [],
     rolAuthority: [ROLES.USER]
-  },  
+  },
 ];

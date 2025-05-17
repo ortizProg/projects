@@ -1,0 +1,131 @@
+<!-- user-management.component.html -->
+<section class="content">
+  <div class="content-block">
+    @for (breadscrum of breadscrums; track breadscrum) {
+    <div class="block-header">
+      <app-breadcrumb
+        [title]="breadscrum.title"
+        [items]="breadscrum.items"
+        [active_item]="breadscrum.active"
+      >
+      </app-breadcrumb>
+    </div>
+    }
+
+    <div class="row clearfix">
+      <div id="card-search">
+        <div class="card col-md-12">
+          <div class="body">
+            <!-- Campos de búsqueda existentes -->
+            <form
+              [formGroup]="userFormSearchFilter"
+              class="row col-md-12 col-lg-12"
+            >
+              <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6 mb-3">
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Nombre</mat-label>
+                  <input
+                    matInput
+                    formControlName="name"
+                    placeholder="Ingrese nombre"
+                  />
+                </mat-form-field>
+              </div>
+
+              <div
+                class="col-md-6 col-lg-6 col-sm-6 col-xs-6 mb-3 d-flex align-items-center"
+              >
+                <mat-form-field class="w-100" appearance="outline">
+                  <mat-label>Correo electrónico</mat-label>
+                  <input
+                    matInput
+                    formControlName="email"
+                    type="email"
+                    placeholder="ejemplo@dominio.com"
+                  />
+                </mat-form-field>
+              </div>
+            </form>
+
+            <div class="materialTableHeader">
+              <div class="left">
+                <ul class="header-buttons-left ms-0">
+                  <li class="tbl-title">
+                    <h2>Lista de usuarios</h2>
+                  </li>
+                </ul>
+              </div>
+              <div class="right">
+                <ul class="tbl-export-btn">
+                  <li>
+                    <button
+                      mat-flat-button
+                      class="bg-cyan"
+                      (click)="openModal()"
+                    >
+                      <mat-icon>person_add</mat-icon>
+                      Crear usuario
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Tabla existente -->
+            <table class="table-responsive" mat-table [dataSource]="dataSource">
+              <mat-spinner *ngIf="isLoading" class="loading-spinner"></mat-spinner>
+
+              <!-- Columna ID -->
+              <ng-container matColumnDef="id">
+                  <th mat-header-cell *matHeaderCellDef width="25%">ID</th>
+                  <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+              </ng-container>
+
+              <!-- Columna Nombre -->
+              <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef>Nombre</th>
+                  <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+              </ng-container>
+
+              <!-- Columna Email -->
+              <ng-container matColumnDef="email">
+                  <th mat-header-cell *matHeaderCellDef>Correo electrónico</th>
+                  <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+              </ng-container>
+
+              <!-- Columna Rol -->
+              <ng-container matColumnDef="role">
+                  <th mat-header-cell *matHeaderCellDef width="25%">Rol</th>
+                  <td mat-cell *matCellDef="let element">{{ getRoleName(element.rol_id) }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef width="19%"> Acciones </th>
+                <td mat-cell *matCellDef="let element">
+                    <button mat-icon-button matTooltip="Editar usuario" (click)="openModal(element.id)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button matTooltip="Eliminar usuario" (click)="deleteUser(element.id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+            <!-- Mensaje cuando no hay datos -->
+            <div *ngIf="dataSource && dataSource.data && dataSource.data.length === 0" class="hgif-statsource no-data-message">
+              No hay información disponible.
+            </div>
+
+            <!-- Paginador de Angular Material -->
+            <mat-paginator [pageSize]="3"
+                        showFirstLastButtons
+                        [pageSizeOptions]="[3, 30, 15]">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

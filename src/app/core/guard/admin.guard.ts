@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
-import { AuthService } from '@core';
+import { AuthService } from '@core/service/auth.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,9 +14,8 @@ export class AdminGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         const userSession = this._authService.getAuthFromSessionStorage();
-            console.log(userSession);
-            
-        if (userSession && userSession.rol_id === 1) {
+
+        if (userSession && Number(userSession.rol_id) === 1) {
             return true;
         } else {
             this._router.navigate(['/authentication/page404']);
