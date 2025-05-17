@@ -7,6 +7,12 @@ import { AuthService } from '../service/auth.service';
 export class JwtInterceptor implements HttpInterceptor {
   constructor(private readonly authenticationService: AuthService) {}
 
+  /**
+   * Intercepta las peticiones http con el fin de injectar el token en los headers de la petición
+   * @param req
+   * @param next
+   * @returns
+   */
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const token = sessionStorage.getItem('accessToken');
 
