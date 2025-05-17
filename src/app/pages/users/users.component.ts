@@ -6,7 +6,7 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 import { UserService } from './users.service';
@@ -16,6 +16,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ModalUserComponent } from '../modal-user/modal-user.component';
+import Swal from 'sweetalert2';
 
 
 export interface User{
@@ -86,7 +87,7 @@ export class UsersComponent implements OnInit {
     private readonly _formBuilder: FormBuilder,
     private readonly userService: UserService,
     private readonly dialogModel: MatDialog,
-    private readonly _snackBar: MatSnackBarModule
+    private readonly _snackBar: MatSnackBar
   ) {
 
   }
@@ -153,8 +154,40 @@ export class UsersComponent implements OnInit {
     });
   }
 
+  //Elimina un usuario
   deleteUser(id: number) {
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "¡No podrás revertir esta acción!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.userService.deleteUser(id).subscribe({
+          next: (response) => {
+            this._snackBar.open(response.message, 'Cerrar', {
+              duration: 5000,
+              panelClass: ['success-snackbar']
+            });
 
+            // Actualizar la lista de usuarios después de eliminar
+            this.getAllUserByAdministrator(); // Método que carga los usuarios
+          },
+          error: (error) => {
+            const errorMessage = error.error?.message || 'Error al eliminar el usuario';
+            this._snackBar.open(errorMessage, 'Cerrar', {
+              duration: 5000,
+              panelClass: ['error-snackbar']
+            });
+          }
+        });
+      }
+    });
   }
 
 }
