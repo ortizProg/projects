@@ -62,6 +62,7 @@ export class ModalUserComponent implements OnInit {
     this.getAllAdministrator();
   }
 
+  // Carga los datos necesarios para iniciar el formulario
   private loadData(id: number) {
 
     this.id = id;
@@ -72,6 +73,9 @@ export class ModalUserComponent implements OnInit {
 
   }
 
+  /**
+   * Obtiene la data inicial del usuario
+  */
   private getDataByUser(id: number) {
     this._userService.getUserById(id).subscribe({
       next: (response) => {
@@ -86,6 +90,9 @@ export class ModalUserComponent implements OnInit {
 
   }
 
+  /**
+   * Inicia el formgroup para el formulario
+  */
   private initForm() {
     this.formCreateUser = this._formBuilder.group({
       nombre: ['', Validators.required],
@@ -100,7 +107,9 @@ export class ModalUserComponent implements OnInit {
     }, { validators: this.passwordMatchValidator })
   }
 
-  // Validador personalizado
+  /**
+   * Validador personalizado para la contraseña
+  */
   passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
@@ -111,6 +120,9 @@ export class ModalUserComponent implements OnInit {
     return null;
   }
 
+  /**
+   * Obtiene todos los administradores disponibles
+  */
   getAllAdministrator() {
     this._userService.getAllAdministrator().subscribe({
       next: (res) => {
@@ -128,6 +140,9 @@ export class ModalUserComponent implements OnInit {
     this.showAdministratorField();
   }
 
+  /**
+   * Oculta el field administrador y elimina las validaciones
+  */
   private hideAdministratorField() {
     this.showFieldAdministrator = false;
 
@@ -146,12 +161,18 @@ export class ModalUserComponent implements OnInit {
 
   }
 
+  /**
+   * Muestra el field administrador
+   */
   private showAdministratorField() {
     this.showFieldAdministrator = true;
     this.formCreateUser.get('administrador_id')?.addValidators(Validators.required);
   }
 
   onSubmit() {
+
+    //Valida que el formulario no sea valido
+
     if(this.formCreateUser.invalid) {
       Swal.fire('Error', 'Por favor completa todos los campos', 'error');
       return;
@@ -163,6 +184,9 @@ export class ModalUserComponent implements OnInit {
   }
 
   private create() {
+
+    // Se obtiene la informacion necesaria
+
     const userDataInformation = {
       nombre: this.formCreateUser.get('nombre')?.value,
       email: this.formCreateUser.get('email')?.value,
@@ -170,6 +194,8 @@ export class ModalUserComponent implements OnInit {
       rol_id: this.formCreateUser.get('rol_id')?.value,
       administrador_id: this.formCreateUser.get('administrador_id')?.value,
     }
+
+    // Envia la petición para crear el usuario
 
     this._userService.createUser(userDataInformation).subscribe({
       next: (response) => {
@@ -184,13 +210,21 @@ export class ModalUserComponent implements OnInit {
     })
   }
 
+  /**
+   * Actualiza un usuario existente
+  */
   private update() {
+
+    // Se obtiene la informacion necesaria
+
     const userDataInformation = {
       nombre: this.formCreateUser.get('nombre')?.value,
       email: this.formCreateUser.get('email')?.value,
       rol_id: this.formCreateUser.get('rol_id')?.value,
       administrador_id: this.formCreateUser.get('administrador_id')?.value,
     }
+
+    // Envia la petición para actualizar el usuario
 
     this._userService.updateUser(this.id, userDataInformation).subscribe({
       next: (response) => {
