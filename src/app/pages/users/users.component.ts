@@ -105,6 +105,7 @@ export class UsersComponent implements OnInit {
     })
   }
 
+  // Obtiene el nombre del rol
   getRoleName(rolId: number): string {
     switch (Number(rolId)) {
       case 1:
@@ -116,6 +117,7 @@ export class UsersComponent implements OnInit {
     }
   }
 
+  // Escucha los cambios en los filtros de nombre y email
   private handleUserFilterChange(controlName: string, filterKey: string) {
     this.userFormSearchFilter.controls[controlName].valueChanges.pipe(
     debounceTime(500),
@@ -128,7 +130,7 @@ export class UsersComponent implements OnInit {
 
 }
 
-
+  // Obtiene todos los usuarios del administrador
   private getAllUserByAdministrator(filters?: any) {
     this.isLoading = true;
     this.userService.getAllUserByAdministrator(filters).subscribe({
@@ -144,6 +146,7 @@ export class UsersComponent implements OnInit {
     })
   }
 
+  // Abre el modal para abrir el formulario
   openModal(id?: number) {
     const dialogRef = this.dialogModel.open(ModalUserComponent, {
       data: {id} // Puedes enviar datos iniciales al modal
