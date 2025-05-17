@@ -24,20 +24,34 @@ export class AuthService {
 
   }
 
+  /**
+   * Iniciar sesión en el sistema
+   * @param email
+   * @param password
+   */
   login(email: string, password: string): Observable<any> {
     const endpoint = `${this.urlBaseServices}/api/v1/auth/login`;
     return this.http.post<any>(endpoint, { email, password });
   }
 
+  /**
+   * Verifica si existe el acccessToken en el session storage
+   */
   isAuthenticated(): boolean {
     const accessToken = sessionStorage.getItem('accessToken');
     return accessToken !== null;
   }
 
+  /**
+   * Obtiene el accessToken actual
+   */
   getTokenFromSessionStorage(): string | null {
     return sessionStorage.getItem('accessToken');
   }
 
+  /**
+   * Se obtiene la auth del token
+   */
   getAuthFromSessionStorage(): any {
     try {
       const lsValue = sessionStorage.getItem('accessToken');
@@ -53,19 +67,34 @@ export class AuthService {
     }
   }
 
+  /**
+   * Se obtiene el token del session storage
+   */
   getToken(): string | null {
     return sessionStorage.getItem('token');
   }
 
+  /**
+   * Cambia el token en el session storage
+   * @param token
+   */
   setToken(token: string): void {
     sessionStorage.setItem('token', token);
   }
 
+  /**
+   * Verifica si el usuario actualmente logueado es un administrador
+   * @param token
+   */
   IsAdminLogged() {
     const userInfo = this.getAuthFromSessionStorage();
     return userInfo && userInfo.role === 'Administrador';
   }
 
+  /**
+   * Verifica si el usuario actualmente logueado es un usuario
+   * @param token
+   */
   IsUserLogged() {
     const userInfo = this.getAuthFromSessionStorage();
     return userInfo && userInfo.role === 'Usuario';
@@ -94,6 +123,10 @@ export class AuthService {
     }
   }
 
+  /**
+   * Cierra la sesión del usuario con el sistema
+   * @param token
+   */
   logout() {
     sessionStorage.removeItem('token');
     this.router.navigate(['/authentication/signin'], {
