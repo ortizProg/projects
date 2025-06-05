@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { ProjectsService } from './projects.service';
+import { ProjectsService } from '../projects/projects.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -18,10 +18,12 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import Swal from 'sweetalert2';
 import { ModalProjectComponent } from '../modal-project/modal-project.component';
 import { DateTime } from "luxon";
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@core';
+import { ModalProjectAssignComponent } from '../modal-project-assign/modal-project-assign.component';
 
 @Component({
-  selector: 'app-projects',
+  selector: 'app-project-detail',
   standalone: true,
   imports: [
     CommonModule,
@@ -39,21 +41,27 @@ import { Router } from '@angular/router';
     MatDialogModule,
     MatProgressSpinnerModule
   ],
-  templateUrl: './projects.component.html',
-  styleUrl: './projects.component.scss'
+  templateUrl: './project-detail.component.html',
+  styleUrl: './project-detail.component.scss'
 })
-export class ProjectsComponent implements OnInit {
+export class ProjectDetailComponent implements OnInit {
+
+  projectId: number = Number(this.routerActivated?.snapshot?.paramMap?.get('id'));
+  showActions: boolean = true;
+
   displayedColumns: string[] = [
+    'icon',
     'name',
-    'fecha_de_creacion',
     'action'
   ]
+
+  project: any;
 
   breadscrums = [
     {
       title: 'Gestión de proyectos',
-      items: [],
-      active: 'Datos básicos'
+      items: ['Proyectos'],
+      active: 'Información proyecto'
     }
   ];
 
@@ -70,13 +78,12 @@ export class ProjectsComponent implements OnInit {
   // search
   projectFormSearchFilter!: FormGroup;
 
-  projectsList: any[] = [];
+  userList: any[] = [];
 
   isLoading = false;
 
   projectDefaultFilterSearch: any = {
     name: undefined,
-    email: undefined
   }
 
   constructor(
@@ -84,16 +91,32 @@ export class ProjectsComponent implements OnInit {
     private readonly projectService: ProjectsService,
     private readonly dialogModel: MatDialog,
     private readonly _snackBar: MatSnackBar,
+    private routerActivated: ActivatedRoute,
+    private authService: AuthService,
     private router: Router
   ) {
 
   }
 
   ngOnInit() {
-    this.createprojectFormSearchFilter();
-    this.getAllProjects();
-    this.handleprojectFilterChange('name', 'name');
-    this.handleprojectFilterChange('email', 'email');
+
+    this.getProject();
+
+  }
+
+  // Obtiene la data del proyecto
+  getProject() {
+    this.projectService.getProjectById(this.projectId).subscribe((response) => {
+      this.project = response.projects;
+      this.verifyActionsAllow(this.project.administrador_id);
+      this.getAllUsers(response.projects.usuarios);
+    })
+  }
+
+  // Verifica si el usuario tiene permitido realizar acciones en el proyecto
+  private verifyActionsAllow(administradorId: number) {
+    const user = this.authService.getAuthFromSessionStorage() ?? {};
+    this.showActions = administradorId == user?.id;
   }
 
   private createprojectFormSearchFilter() {
@@ -110,41 +133,32 @@ export class ProjectsComponent implements OnInit {
     distinctUntilChanged()
     ).subscribe((value: any ) => {
     this.projectDefaultFilterSearch[filterKey] = value;
-    console.log(this.projectDefaultFilterSearch);
-    this.getAllProjects({ ...this.projectDefaultFilterSearch, [filterKey]: value });
     });
 
 }
 
-  // Obtiene todos los projectos asociados al proyecto
-  private getAllProjects(filters?: any) {
+  // Obtiene todos los usuarios asociados al proyecto
+  private getAllUsers(users: any[]) {
     this.isLoading = true;
-    this.projectService.getAllProjects(filters).subscribe({
-      next: (response) => {
-        this.projectsList = response.projects;
-        this.dataSource.data = response.projects;
-        this.dataSource.paginator = this.paginator;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    })
+    this.userList = users;
+    this.dataSource.data = users;
+    this.dataSource.paginator = this.paginator;
+    this.isLoading = false;
   }
 
   // Abre el modal para abrir el formulario
-  openModal(id?: number) {
-    const dialogRef = this.dialogModel.open(ModalProjectComponent, {
+  openModal(id: number) {
+    const dialogRef = this.dialogModel.open(ModalProjectAssignComponent, {
       data: {id} // Puedes enviar datos iniciales al modal
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      this.getAllProjects();
+      this.getProject();
     })
   }
 
-  //Elimina un proyecto
-  deleteProject(id: number) {
+  //Elimina la asociación de un usuario con el proyecto
+  disassociation(id: number) {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¡No podrás revertir esta acción!",
@@ -157,18 +171,18 @@ export class ProjectsComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.projectService.deleteProject(id).subscribe({
+        this.projectService.disassociateUser(id, this.projectId).subscribe({
           next: (response) => {
             this._snackBar.open(response.message, 'Cerrar', {
               duration: 5000,
               panelClass: ['success-snackbar']
             });
 
-            // Actualizar la lista de proyectos después de eliminar
-            this.getAllProjects(); // Método que carga los proyectos
+            // Actualizar la lista de usuarios despues de eliminar un usuario
+            this.getProject(); // Método que carga los datos del proyecto
           },
           error: (error) => {
-            const errorMessage = error.error?.message || 'Error al eliminar el proyecto';
+            const errorMessage = error.error?.message || 'Error al eliminar el usuario';
             this._snackBar.open(errorMessage, 'Cerrar', {
               duration: 5000,
               panelClass: ['error-snackbar']
@@ -179,12 +193,13 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  viewDetailByProject(projectId: number) {
-    this.router.navigate([`/pages/projects/${projectId}`])
+  formatDate(date: string) {
+    if(!date) return '';
+    return DateTime.fromISO(date).toFormat('yyyy-MM-dd');
   }
 
-  formatDate(date: string) {
-    return DateTime.fromISO(date).toLocaleString(DateTime.DATETIME_SHORT);
+  back() {
+    this.router.navigate([`/pages/projects`])
   }
 
 }

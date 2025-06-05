@@ -53,16 +53,18 @@
         </div>
 
         <!-- Administrador field -->
-        <div *ngIf="showFieldAdministrator" class="col-md-6">
-          <mat-form-field class="w-100" appearance="outline">
-            <mat-label>Administrador</mat-label>
-            <mat-select formControlName="administrador_id">
-              @for(item of administratorValues; track $index) {
-                <mat-option [value]="item.id">{{item.nombre}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-        </div>
+        @if (showFieldAdministrator) {
+          <div *ngIf="showFieldAdministrator" class="col-md-6">
+            <mat-form-field class="w-100" appearance="outline">
+              <mat-label>Administrador</mat-label>
+              <mat-select formControlName="administrador_id">
+                @for(item of administratorValues; track $index) {
+                  <mat-option [value]="item.id">{{item.nombre}}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+        }
       </div>
     </form>
   </div>

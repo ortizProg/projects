@@ -152,6 +152,10 @@ export class UsersComponent implements OnInit {
     const dialogRef = this.dialogModel.open(ModalUserComponent, {
       data: {id} // Puedes enviar datos iniciales al modal
     });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.getAllUserByAdministrator();
+    })
   }
 
   //Elimina un usuario

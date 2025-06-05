@@ -1,0 +1,20 @@
+<div class="col-md-12">
+  <h2 mat-dialog-title>Asignación de usuarios</h2>
+  <div mat-dialog-content>
+    <form [formGroup]="formProject" *ngIf="formProject" >
+      <div class="row">
+
+        @for (user of usersData; track $index) {
+          <p><mat-checkbox formControlName="{{user.id}}">{{user.nombre}}</mat-checkbox></p>
+        }
+
+      </div>
+    </form>
+  </div>
+  <mat-dialog-actions align="end">
+      @if (formProject) {
+        <button mat-button mat-dialog-close>Cancelar</button>
+        <button mat-button cdkFocusInitial [disabled]="formProject.invalid" (click)="onSubmit()">Asignar</button>
+      }
+  </mat-dialog-actions>
+</div>

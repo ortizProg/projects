@@ -1,0 +1,93 @@
+<section class="content position-relative">
+  <div class="content-block">
+    @for (breadscrum of breadscrums; track breadscrum) {
+    <div class="block-header">
+      <app-breadcrumb [title]="breadscrum.title" [items]="breadscrum.items" [active_item]="breadscrum.active">
+      </app-breadcrumb>
+    </div>
+    }
+    <mat-icon class="position-absolute back_arrow" (click)="back()">arrow_back</mat-icon>
+    <div class="row clearfix">
+      <div id="card-search">
+        <div class="card col-md-12">
+          <div class="body">
+
+            <div class="row">
+              <div class="col-md-6 col-sm-12">
+                <div class="project-card">
+                  <h2>
+                    {{project?.nombre}}
+                  </h2>
+                  <p>
+                    {{project?.descripcion}}
+                  </p>
+                  <span class="project-card__since">
+                    {{
+                    formatDate(project?.fecha_de_creacion)
+                    }}
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-md-6 sol-sm-12">
+
+                @if (showActions) {
+                  <button mat-flat-button class="bg-cyan right" (click)="openModal(projectId)">
+                    <mat-icon>add</mat-icon>
+                    Agregar usuarios
+                  </button>
+                }
+
+                <div class="d-flex w-100 h-100 flex-column">
+                  <!-- Tabla existente -->
+                  <table class="table-responsive" mat-table [dataSource]="dataSource" style="background: none;">
+                    <mat-spinner *ngIf="isLoading" class="loading-spinner"></mat-spinner>
+
+                    <!-- Columna ID -->
+                    <ng-container matColumnDef="icon">
+                      <th mat-header-cell *matHeaderCellDef width="25px"></th>
+                      <td mat-cell *matCellDef="let element">
+                        <mat-icon>{{element.id != project.administrador_id ? 'person' : 'star'}}</mat-icon>
+                      </td>
+                    </ng-container>
+
+                    <!-- Columna Nombre -->
+                    <ng-container matColumnDef="name">
+                      <th mat-header-cell *matHeaderCellDef width="90%"></th>
+                      <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef width="25px"></th>
+                      <td mat-cell *matCellDef="let element">
+                        @if(showActions && element.id != project.administrador_id) {
+                          <button mat-icon-button matTooltip="Eliminar usuario" (click)="disassociation(element.id)">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        }
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+                  <div style="flex:1;"></div>
+                  <!-- Mensaje cuando no hay datos -->
+                  <div *ngIf="dataSource && dataSource.data && dataSource.data.length === 0"
+                    class="hgif-statsource no-data-message">
+                    No hay información disponible.
+                  </div>
+
+                  <!-- Paginador de Angular Material -->
+                  <mat-paginator style="background: none;" [pageSize]="3" showFirstLastButtons [pageSizeOptions]="[3, 30, 15]">
+                  </mat-paginator>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

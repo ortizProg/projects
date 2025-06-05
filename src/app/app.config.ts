@@ -15,6 +15,7 @@ import { allIcons } from 'angular-feather/icons';
 import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { JwtInterceptor } from '@core/interceptor/jwt.interceptor';
+import { ErrorInterceptor } from '@core/interceptor/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -37,7 +38,16 @@ export const appConfig: ApplicationConfig = {
         },
       },
     },
-    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true
+    },
     importProvidersFrom(FeatherModule.pick(allIcons)),
     provideCharts(withDefaultRegisterables()),
     provideHttpClient(withInterceptorsFromDi()),

@@ -1,0 +1,33 @@
+.project-card {
+  position: relative;
+  width: 100%;
+  min-height: 300px;
+  border: 2px solid #F0F3FB;
+  box-shadow: 10px 10px 10px #ececece8;
+  border-radius: 10px;
+  padding: 10px;
+
+  h2 {
+    text-align: center;
+  }
+
+  p {
+    padding: 10px;
+    font-size: 1.15rem;
+    font-weight: lighter;
+  }
+
+  &__since {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-weight: lighter;
+  }
+
+}
+
+.back_arrow {
+  z-index: 1;
+  transform: translateY(-35px);
+  cursor: pointer;
+}

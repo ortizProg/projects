@@ -12,15 +12,11 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { debounceTime, distinctUntilChanged } from "rxjs";
 import Swal from "sweetalert2";
 import { ROLES } from "@shared/models/enums";
+import { ProjectsService } from "../projects/projects.service";
 
-
-
-export interface User{
-  name: string;
-}
 
 @Component({
-  selector: 'app-modal-user',
+  selector: 'app-modal-project',
   standalone: true,
   imports: [
     CommonModule,
@@ -38,27 +34,29 @@ export interface User{
     ReactiveFormsModule,
     MatProgressSpinnerModule
   ],
-  templateUrl: './modal-user.component.html',
-  styleUrl: './modal-user.component.scss'
+  templateUrl: './modal-project.component.html',
+  styleUrl: './modal-project.component.scss'
 })
-export class ModalUserComponent implements OnInit {
+export class ModalProjectComponent implements OnInit {
 
   id!: number;
-  formCreateUser!: FormGroup;
+  formProject!: FormGroup;
   administratorValues: any[] = [];
   showFieldAdministrator: boolean = false;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private readonly _formBuilder: FormBuilder,
-    private readonly _userService: UserService,
-    private readonly dialogRef: MatDialogRef<ModalUserComponent>,
-    private readonly _snackBar: MatSnackBar
+    private readonly _projectService: ProjectsService,
+    private readonly dialogRef: MatDialogRef<ModalProjectComponent>,
+    private readonly _snackBar: MatSnackBar,
+    private readonly _userService: UserService
   ) {
     this.initForm();
   }
 
   ngOnInit(): void {
+    this.analizeAdministratorField();
     this.loadData(this.data.id);
     this.getAllAdministrator();
   }
@@ -70,19 +68,19 @@ export class ModalUserComponent implements OnInit {
 
     if(!id) return this.initForm();
 
-    this.getDataByUser(id);
+    this.getDataByProject(id);
 
   }
 
   /**
-   * Obtiene la data inicial del usuario
+   * Obtiene la data inicial del proyecto
   */
-  private getDataByUser(id: number) {
-    this._userService.getUserById(id).subscribe({
+  private getDataByProject(id: number) {
+    this._projectService.getProjectById(id).subscribe({
       next: (response) => {
         this.initForm();
-        this.formCreateUser.patchValue(response.user)
-        this.onChangeRole(response.user.rol_id)
+        console.log("🚀 ~ ModalProjectComponent ~ this._projectService.getProjectById ~ response.projects:", response.projects)
+        this.formProject.patchValue(response.projects)
       },
       error: (err) => {
         console.log(err);
@@ -95,17 +93,11 @@ export class ModalUserComponent implements OnInit {
    * Inicia el formgroup para el formulario
   */
   private initForm() {
-    this.formCreateUser = this._formBuilder.group({
+    this.formProject = this._formBuilder.group({
       nombre: ['', Validators.required],
-      email: ['', Validators.compose([
-        Validators.required,
-        Validators.email
-      ])],
-      password: ['', !this.id ? Validators.required : undefined],
-      confirmPassword: ['', !this.id ? Validators.required : undefined],
-      rol_id: ['', Validators.required],
-      administrador_id: [''],
-    }, { validators: this.passwordMatchValidator })
+      descripcion: ['', Validators.required],
+      administrador_id: [undefined],
+    })
   }
 
   /**
@@ -135,8 +127,8 @@ export class ModalUserComponent implements OnInit {
     })
   }
 
-  onChangeRole(value: string | number) {
-    if(Number(value) === ROLES.ADMIN) return this.hideAdministratorField();
+  analizeAdministratorField() {
+    if(!this.data.id) return this.hideAdministratorField();
 
     this.showAdministratorField();
   }
@@ -147,7 +139,7 @@ export class ModalUserComponent implements OnInit {
   private hideAdministratorField() {
     this.showFieldAdministrator = false;
 
-    const control = this.formCreateUser.get('administrador_id');
+    const control = this.formProject.get('administrador_id');
 
     // Filtra el validador que quieres eliminar (ej: Validators.email)
     const newValidators = control?.validator
@@ -167,14 +159,15 @@ export class ModalUserComponent implements OnInit {
    */
   private showAdministratorField() {
     this.showFieldAdministrator = true;
-    this.formCreateUser.get('administrador_id')?.addValidators(Validators.required);
+    console.log("🚀 ~ ModalProjectComponent ~ showAdministratorField ~ this.showFieldAdministrator:", this.showFieldAdministrator)
+    this.formProject.get('administrador_id')?.addValidators(Validators.required);
   }
 
   onSubmit() {
 
     //Valida que el formulario no sea valido
 
-    if(this.formCreateUser.invalid) {
+    if(this.formProject.invalid) {
       Swal.fire('Error', 'Por favor completa todos los campos', 'error');
       return;
     }
@@ -189,19 +182,17 @@ export class ModalUserComponent implements OnInit {
     // Se obtiene la informacion necesaria
 
     const userDataInformation = {
-      nombre: this.formCreateUser.get('nombre')?.value,
-      email: this.formCreateUser.get('email')?.value,
-      password: this.formCreateUser.get('password')?.value,
-      rol_id: this.formCreateUser.get('rol_id')?.value,
-      administrador_id: this.formCreateUser.get('administrador_id')?.value,
+      nombre: this.formProject.get('nombre')?.value,
+      descripcion: this.formProject.get('descripcion')?.value,
+      administrador_id: this.formProject.get('administrador_id')?.value,
     }
 
-    // Envia la petición para crear el usuario
+    // Envia la petición para crear el proyecto
 
-    this._userService.createUser(userDataInformation).subscribe({
+    this._projectService.createProject(userDataInformation).subscribe({
       next: (response) => {
         this._snackBar.open(response.message, 'Cerrar', {duration: 5000});
-        this.formCreateUser.reset();
+        this.formProject.reset();
         this.dialogRef.close(true);
       },
       error: (error) => {
@@ -212,25 +203,24 @@ export class ModalUserComponent implements OnInit {
   }
 
   /**
-   * Actualiza un usuario existente
+   * Actualiza un proyecto existente
   */
   private update() {
 
     // Se obtiene la informacion necesaria
 
-    const userDataInformation = {
-      nombre: this.formCreateUser.get('nombre')?.value,
-      email: this.formCreateUser.get('email')?.value,
-      rol_id: this.formCreateUser.get('rol_id')?.value,
-      administrador_id: this.formCreateUser.get('administrador_id')?.value,
+    const dataInformation = {
+      nombre: this.formProject.get('nombre')?.value,
+      descripcion: this.formProject.get('descripcion')?.value,
+      administrador_id: this.formProject.get('administrador_id')?.value,
     }
 
-    // Envia la petición para actualizar el usuario
+    // Envia la petición para actualizar el proyecto
 
-    this._userService.updateUser(this.id, userDataInformation).subscribe({
+    this._projectService.updateProject(this.id, dataInformation).subscribe({
       next: (response) => {
         this._snackBar.open(response.message, 'Cerrar', {duration: 5000});
-        this.formCreateUser.reset();
+        this.formProject.reset();
         this.dialogRef.close(true);
       },
       error: (error) => {
