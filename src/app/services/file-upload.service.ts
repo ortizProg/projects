@@ -23,4 +23,17 @@ export class FileUploadService {
 
     return this.http.post(this.apiUrl, formData);
   }
+
+  updateFile(id: number, file: File | null, metadata: any): Observable<any> {
+    const formData: FormData = new FormData();
+    if (file) {
+      formData.append('file', file);
+    }
+    formData.append('nombre', metadata.nombre);
+    formData.append('fecha', metadata.fecha);
+    formData.append('centro_salud_id', metadata.centro_salud_id);
+    formData.append('numero_documento', metadata.numero_documento);
+
+    return this.http.put(`${this.apiUrl}/${id}`, formData);
+  }
 }

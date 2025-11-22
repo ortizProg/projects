@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Subir Historia Clínica (PDF)</h2>
+<h2 mat-dialog-title>{{ data.id ? 'Editar Historia Clínica (PDF)' : 'Subir Historia Clínica (PDF)' }}</h2>
 <mat-dialog-content class="mat-typography">
     <form [formGroup]="uploadForm" class="upload-form">
 

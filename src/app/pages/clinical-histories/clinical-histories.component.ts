@@ -149,16 +149,22 @@ export class ClinicalHistoriesComponent implements OnInit {
   }
 
   // Abre el modal para abrir el formulario
-  openModal(id?: number) {
-    if (id) {
-      // Si hay ID, es edición, usamos el modal de proyecto (o el que corresponda para editar)
-      // Asumiendo que la edición sigue usando ModalProjectComponent o similar
-      const dialogRef = this.dialogModel.open(ModalProjectComponent, {
-        data: {id}
+  openModal(id?: number, element?: any) {
+    if (id && element) {
+      // Si hay ID, es edición
+      const dialogRef = this.dialogModel.open(ModalUploadPdfComponent, {
+        width: '600px',
+        data: {
+          id: id,
+          history: element,
+          documentNumber: this.documentNumber
+        }
       });
 
-      dialogRef.afterClosed().subscribe(() => {
-        this.getAllProjects();
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.getAllProjects();
+        }
       })
     } else {
       // Si no hay ID, es creación/subida, usamos el nuevo modal de PDF

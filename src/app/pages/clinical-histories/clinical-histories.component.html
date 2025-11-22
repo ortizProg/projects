@@ -78,11 +78,8 @@
                   <button mat-icon-button matTooltip="Ver historia clinica" (click)="viewDetailByHealtCenter(element)">
                     <mat-icon>assignment</mat-icon>
                   </button>
-                  <button mat-icon-button matTooltip="Editar" (click)="openModal(element.id)">
+                  <button mat-icon-button matTooltip="Editar" (click)="openModal(element.id, element)">
                     <mat-icon>edit</mat-icon>
-                  </button>
-                  <button mat-icon-button matTooltip="Eliminar" (click)="deleteProject(element.id)">
-                    <mat-icon>delete</mat-icon>
                   </button>
                 </td>
               </ng-container>

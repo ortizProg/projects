@@ -64,6 +64,15 @@ export class ModalUploadPdfComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadHealthCenters();
+    if (this.data.id && this.data.history) {
+      console.log(this.data);
+      console.log(this.data.history.centro_salud_id);
+      this.uploadForm.patchValue({
+        nombre: this.data.history.nombre,
+        fecha: this.data.history.fecha,
+        centro_salud_id: Number(this.data.history.centro_salud_id)
+      });
+    }
   }
 
   loadHealthCenters() {
@@ -98,8 +107,13 @@ export class ModalUploadPdfComponent implements OnInit {
   }
 
   uploadFile(): void {
-    if (!this.selectedFile || this.uploadForm.invalid) {
+    if (this.uploadForm.invalid) {
       this.uploadForm.markAllAsTouched();
+      return;
+    }
+
+    if (!this.selectedFile && !this.data.id) {
+      this.snackBar.open('Por favor selecciona un archivo.', 'Cerrar', { duration: 3000 });
       return;
     }
 
@@ -109,18 +123,33 @@ export class ModalUploadPdfComponent implements OnInit {
       numero_documento: this.data.documentNumber
     };
     
-    this.fileUploadService.uploadFile(this.selectedFile, metadata).subscribe({
-      next: (response) => {
-        this.isUploading = false;
-        this.snackBar.open('Archivo subido exitosamente.', 'Cerrar', { duration: 3000 });
-        this.dialogRef.close(true);
-      },
-      error: (error) => {
-        this.isUploading = false;
-        console.error('Upload error:', error);
-        this.snackBar.open('Error al subir el archivo.', 'Cerrar', { duration: 3000 });
-      }
-    });
+    if (this.data.id) {
+      this.fileUploadService.updateFile(this.data.id, this.selectedFile, metadata).subscribe({
+        next: (response) => {
+          this.isUploading = false;
+          this.snackBar.open('Historia clínica actualizada exitosamente.', 'Cerrar', { duration: 3000 });
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          this.isUploading = false;
+          console.error('Update error:', error);
+          this.snackBar.open('Error al actualizar la historia clínica.', 'Cerrar', { duration: 3000 });
+        }
+      });
+    } else {
+      this.fileUploadService.uploadFile(this.selectedFile!, metadata).subscribe({
+        next: (response) => {
+          this.isUploading = false;
+          this.snackBar.open('Archivo subido exitosamente.', 'Cerrar', { duration: 3000 });
+          this.dialogRef.close(true);
+        },
+        error: (error) => {
+          this.isUploading = false;
+          console.error('Upload error:', error);
+          this.snackBar.open('Error al subir el archivo.', 'Cerrar', { duration: 3000 });
+        }
+      });
+    }
   }
 
   removeFile(): void {
