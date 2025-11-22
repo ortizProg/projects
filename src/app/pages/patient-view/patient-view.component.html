@@ -1,0 +1,108 @@
+<div class="p-4 p-md-5">
+
+  <div class="container-xl">
+
+    <!-- Encabezado -->
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+      <p class="h3 fw-bold text-dark mb-0">Tus historias clinicas</p>
+      <div class="d-flex justify-content-center align-items-center" style="cursor: pointer" (click)="logout()">
+        <i class="material-symbols-outlined">logout</i>
+        <span class="fw-bold text-dark mb-0">Salir</span>
+      </div>
+    </div>
+
+    <!-- Buscador y filtros -->
+    <div class="row g-3 mb-4">
+
+      <!-- Barra de búsqueda -->
+      <div class="col-12 col-md-8 col-lg-8">
+        <label class="w-100">
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-secondary">
+              <span class="material-symbols-outlined">search</span>
+              <input type="text" class="form-control border-0" placeholder="Buscar por nombre, doctor o fecha...">
+            </span>
+          </div>
+        </label>
+      </div>
+
+      <!-- Filtros -->
+
+    <!-- Tabla -->
+    <div class="table-responsive rounded-3 border shadow-sm">
+      <table class="table align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th scope="col" class="text-uppercase small fw-semibold">Nombre</th>
+            <th scope="col" class="text-uppercase small fw-semibold">Doctor</th>
+            <th scope="col" class="text-uppercase small fw-semibold">Fecha</th>
+            <th scope="col" class="text-end text-uppercase small fw-semibold">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="fw-semibold text-dark">Consulta de cardiologia</div>
+              <div class="text-muted small">San Jorge</div>
+            </td>
+            <td class="text-muted small">Dr. Emily Carter</td>
+            <td class="text-muted small">2023-10-26</td>
+            <td class="text-end">
+              <div class="d-flex justify-content-end gap-3">
+                <span href="#" class="text-decoration-none text-secondary d-flex align-items-center gap-1" style="cursor: pointer" (click)="seeHistory()" >
+                  <span class="material-symbols-outlined fs-6">visibility</span> Previsualizar
+                </span>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="fw-semibold text-dark">Revisión fisica anual</div>
+              <div class="text-muted small">Santa Mónica</div>
+            </td>
+            <td class="text-muted small">Dr. Ben Adams</td>
+            <td class="text-muted small">2023-09-15</td>
+            <td class="text-end">
+              <div class="d-flex justify-content-end gap-3">
+                <span href="#" class="text-decoration-none text-secondary d-flex align-items-center gap-1" style="cursor: pointer" (click)="seeHistory()" >
+                  <span class="material-symbols-outlined fs-6">visibility</span> Previsualizar
+                </span>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="fw-semibold text-dark">Reporte radiologia - X-Ray</div>
+              <div class="text-muted small">Radiologos</div>
+            </td>
+            <td class="text-muted small">Dr. Olivia Chen</td>
+            <td class="text-muted small">2023-08-02</td>
+            <td class="text-end">
+              <div class="d-flex justify-content-end gap-3">
+                <span href="#" class="text-decoration-none text-secondary d-flex align-items-center gap-1" style="cursor: pointer" (click)="seeHistory()" >
+                  <span class="material-symbols-outlined fs-6">visibility</span> Previsualizar
+                </span>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Estado vacío (opcional) -->
+          <!--
+          <tr>
+            <td colspan="4" class="text-center py-5">
+              <div class="d-flex flex-column align-items-center gap-3">
+                <span class="material-symbols-outlined fs-1 text-secondary">upcoming</span>
+                <h5 class="fw-semibold mb-0">No Records Found</h5>
+                <p class="text-muted small mb-0">Your medical records will appear here once available.</p>
+              </div>
+            </td>
+          </tr>
+          -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>

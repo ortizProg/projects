@@ -1,0 +1,27 @@
+<section class="content">
+  <div class="content-block">
+    @for (breadscrum of breadscrums; track breadscrum) {
+    <div class="block-header">
+      <app-breadcrumb
+        [title]="breadscrum.title"
+        [items]="breadscrum.items"
+        [active_item]="breadscrum.active"
+      >
+      </app-breadcrumb>
+    </div>
+    }
+    <div class="row clearfix">
+      <div id="card-search">
+        <div class="card col-md-12">
+          <div class="body">
+            <div class="row">
+              <div class="col-md-12">
+                  <embed src="../../../assets/pdfs/hc1.pdf" type="application/pdf" class="viewer w-100" style="height: 600px;" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

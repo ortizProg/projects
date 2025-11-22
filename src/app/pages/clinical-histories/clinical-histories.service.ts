@@ -6,7 +6,7 @@ import { map, Observable } from "rxjs";
 @Injectable({
   providedIn: "root"
 })
-export class ProjectsService {
+export class ClinicalHistoriesService {
 
 
   urlBaseServices: string = URL_SERVICIOS;
@@ -14,12 +14,12 @@ export class ProjectsService {
   constructor(private readonly http: HttpClient) { };
 
   /**
-   * Crea un proyecto
+   * Crea un centro de salud
    * @param data
    * @returns
    */
-  createProject(data: any): Observable<any> {
-    const endpoint = `${this.urlBaseServices}/api/v1/projects/create`;
+  create(data: any): Observable<any> {
+    const endpoint = `${this.urlBaseServices}/api/v1/healt-centers/create`;
     return this.http.post<any>(endpoint, data)
   }
 
@@ -29,8 +29,8 @@ export class ProjectsService {
    * @param projectData
    * @returns
    */
-  updateProject(projectId: number, projectData: any): Observable<any> {
-    const endpoint = `${this.urlBaseServices}/api/v1/projects/update/${projectId}`;
+  update(projectId: number, projectData: any): Observable<any> {
+    const endpoint = `${this.urlBaseServices}/api/v1/healt-centers/update/${projectId}`;
     return this.http.put<any>(endpoint, projectData)
   }
 
@@ -39,8 +39,8 @@ export class ProjectsService {
    * @param userId
    * @returns
    */
-  deleteProject(userId: number): Observable<any> {
-    const endpoint = `${this.urlBaseServices}/api/v1/projects/delete/${userId}`;
+  delete(userId: number): Observable<any> {
+    const endpoint = `${this.urlBaseServices}/api/v1/healt-centers/delete/${userId}`;
     return this.http.delete<any>(endpoint)
   }
 
@@ -49,8 +49,8 @@ export class ProjectsService {
    * @param filters
    * @returns
    */
-  getAllProjects(filters: any): Observable<any> {
-    const endpoint = `${this.urlBaseServices}/api/v1/projects`;
+  getAll(filters: any): Observable<any> {
+    const endpoint = `${this.urlBaseServices}/api/v1/healt-centers`;
     const params = new HttpParams({fromObject: {
       nombre: filters?.name || '',
       email: filters?.email || ''
@@ -63,8 +63,8 @@ export class ProjectsService {
    * @param id
    * @returns
    */
-  getProjectById(id: number): Observable<any> {
-    const endpoint = `${this.urlBaseServices}/api/v1/projects/${id}`;
+  getById(id: number): Observable<any> {
+    const endpoint = `${this.urlBaseServices}/api/v1/healt-centers/${id}`;
     return this.http.get<any>(endpoint).pipe(
       map((response) => {
         const project = response.projects;
@@ -81,7 +81,7 @@ export class ProjectsService {
    * @returns
    */
   disassociateUser(userId: number, projectId: number) {
-    const endpoint = `${this.urlBaseServices}/api/v1/projects/disassociate`;
+    const endpoint = `${this.urlBaseServices}/api/v1/healt-centers/disassociate`;
     return this.http.delete<any>(
       endpoint,
       {
@@ -99,7 +99,7 @@ export class ProjectsService {
    * @returns
    */
   getAllAvailableUsers(projectId: number): Observable<any> {
-    const endpoint = `${this.urlBaseServices}/api/v1/projects/users/availables/${projectId}`;
+    const endpoint = `${this.urlBaseServices}/api/v1/healt-centers/users/availables/${projectId}`;
     return this.http.get<any>(endpoint)
   }
 

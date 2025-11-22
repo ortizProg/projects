@@ -14,8 +14,8 @@ export const ROUTES: RouteInfo[] = [
     rolAuthority: [ROLES.ADMIN, ROLES.USER]
   },
   {
-    path: '/pages/projects',
-    title: 'Gestión de proyectos',
+    path: '/pages/healt-centers',
+    title: 'Gestión centros de salud',
     iconType: 'material-icons-outlined',
     icon: 'assessment',
     class: '',
@@ -35,11 +35,11 @@ export const ROUTES: RouteInfo[] = [
     badge: '',
     badgeClass: '',
     submenu: [],
-    rolAuthority: [ROLES.ADMIN]
+    rolAuthority: [ROLES.ADMIN, ROLES.ADMIN_HEALT_CENTER]
   },
   {
-    path: '/page/projects',
-    title: 'Mis proyectos',
+    path: '/pages/clinical-histories',
+    title: 'Gestión historias clinicas',
     iconType: 'material-icons-outlined',
     icon: 'assessment',
     class: '',
@@ -47,6 +47,6 @@ export const ROUTES: RouteInfo[] = [
     badge: '',
     badgeClass: '',
     submenu: [],
-    rolAuthority: [ROLES.USER]
+    rolAuthority: [ROLES.ADMIN, ROLES.USER, ROLES.ADMIN_HEALT_CENTER]
   },
 ];

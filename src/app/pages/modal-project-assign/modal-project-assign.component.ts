@@ -12,7 +12,7 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { debounceTime, distinctUntilChanged } from "rxjs";
 import Swal from "sweetalert2";
 import { ROLES } from "@shared/models/enums";
-import { ProjectsService } from "../projects/projects.service";
+import { HealtCentersService } from "../healt-centers/healt-centers.service";
 import User from "@core/models/user.model";
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatIconModule } from "@angular/material/icon";
@@ -53,7 +53,7 @@ export class ModalProjectAssignComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private readonly _formBuilder: FormBuilder,
-    private readonly _projectService: ProjectsService,
+    private readonly _healtCentersService: HealtCentersService,
     private readonly dialogRef: MatDialogRef<ModalProjectAssignComponent>,
     private readonly _snackBar: MatSnackBar,
     private readonly changeDetectorRef: ChangeDetectorRef
@@ -85,7 +85,7 @@ export class ModalProjectAssignComponent implements OnInit {
    * Obtiene todos los administradores disponibles
   */
   getAllAvailableUsers() {
-    this._projectService.getAllAvailableUsers(this.data.id).subscribe({
+    this._healtCentersService.getAllAvailableUsers(this.data.id).subscribe({
       next: (res) => {
         this.usersData = res.data ?? [];
         this.initForm();
@@ -158,7 +158,7 @@ export class ModalProjectAssignComponent implements OnInit {
 
     // Envia la petición para crear el proyecto
 
-    this._projectService.createProject(userDataInformation).subscribe({
+    this._healtCentersService.create(userDataInformation).subscribe({
       next: (response) => {
         this._snackBar.open(response.message, 'Cerrar', {duration: 5000});
         this.formProject.reset();
@@ -186,7 +186,7 @@ export class ModalProjectAssignComponent implements OnInit {
 
     // Envia la petición para actualizar el proyecto
 
-    this._projectService.updateProject(this.id, dataInformation).subscribe({
+    this._healtCentersService.update(this.id, dataInformation).subscribe({
       next: (response) => {
         this._snackBar.open(response.message, 'Cerrar', {duration: 5000});
         this.formProject.reset();

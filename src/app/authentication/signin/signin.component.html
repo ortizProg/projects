@@ -1,18 +1,37 @@
-<div class="auth-container">
-  <div class="row auth-main">
-    <div class="col-sm-6 px-0 d-none d-sm-block ml-5">
-      <div class="left-img" style="background-image: url();">
-      </div>
-    </div>
-    <div class="col-sm-6 auth-form-section">
-      <div class="form-section">
-        <div class="auth-wrapper">
-          <h6 class="welcome-msg"> Bienvenidos al Gestor de proyectos</h6>
-          <h6 class="social-login-title"></h6>
-          <h2 class="login-title">Iniciar sesión</h2>
+<div class="d-flex flex-column min-vh-100 w-100 position-relative overflow-hidden">
+
+  <!-- Main -->
+  <main class="flex-grow-1 d-flex align-items-center justify-content-center p-4 bg-light">
+    <div class="container-lg">
+      <div class="row g-0 shadow-lg rounded-4 overflow-hidden bg-white">
+
+        <!-- Imagen lateral -->
+        <div class="col-md-6 d-none d-md-flex flex-column align-items-center justify-content-center p-4 bg-light">
+          <div class="w-100 ratio ratio-1x1 rounded-3"
+               style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDDE0U0RCcVExKgVyjwkbl1cAMQvOmI0kiOmYJQ6J12HFAinUcpi0X1eUZnAVsTbz-WQEg7FY573QOwTW7gaE0h229bP-tX0VPCaGSmq6-NE9gZwXfmybxSZX9Lvl0bJB0OHDrcQgdRdMT_Ccka6VOOE1kUNEnRIN5dDWqI7b9B3nIeMJRUCBXWvQ85G-RJrTYc46ZuvkwY2WaLVtRfjDy0X0qJcKS_6oP4nKlaThjnqPFywfkzloDjVWeJae6nCmg0bIc7V4wLIDLg');
+                      background-size: cover; background-position: center;"></div>
+
+          <div class="mt-4 text-center">
+            <h3 class="fw-bold fs-4 text-dark">La salud de los pacientes en tus manos</h3>
+
+          </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="col-12 col-md-6 d-flex flex-column justify-content-center p-4 p-sm-5">
+          <div class="mb-4">
+            <p class="fs-3 fw-bold lh-sm mb-2 text-dark">
+              Bienvenido a PCHC
+            </p>
+            <p class="text-muted mb-0">
+              Por favor ingrese sus credenciales para continuar
+            </p>
+          </div>
+
           <form class="validate-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
             <div class="row">
               <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+
                 <mat-form-field class="example-full-width" appearance="outline">
                   <mat-label>Correo electrónico</mat-label>
                   <input matInput formControlName="username" />
@@ -45,16 +64,29 @@
             @if (error) {
             <div class="alert alert-danger mt-3 mb-0">{{error}}</div>
             }
-            <div class="container-auth-form-btn">
-              <div style="text-align:center">
-                <button mat-flat-button color="accent" class="auth-form-btn" [disabled]="!authForm.valid "
-                  type="submit">Iniciar sesión</button>
-              </div>
+            <div class="container-auth-form-btn w-100">
+              <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2 py-2 fw-semibold w-100" [disabled]="!authForm.valid">
+                <span class="material-symbols-outlined">lock_open</span>
+                Iniciar sesión
+              </button>
+            </div>
+            <div class="text-center mt-2">
+              <!-- <a href="#" class="small text-primary text-decoration-none">Necesitas ayuda?</a> -->
             </div>
           </form>
-          <h6 class="social-login-title"></h6>
         </div>
+
       </div>
     </div>
-  </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-4 small text-muted bg-white border-top">
+    <div class="d-flex justify-content-center gap-2">
+      <a href="#" class="text-decoration-none text-primary">Politica de privacidad</a>
+      <span>·</span>
+      <a href="#" class="text-decoration-none text-primary">Terminos y condiciones</a>
+    </div>
+    <p class="mt-2 mb-0">© 2025 PCHC. Todos los derechos reservados.</p>
+  </footer>
 </div>

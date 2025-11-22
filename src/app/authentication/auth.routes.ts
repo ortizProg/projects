@@ -1,6 +1,7 @@
 import { Route } from "@angular/router";
-import { SigninComponent } from "./signin/signin.component";
 import { Page404Component } from "./page404/page404.component";
+import { SigninComponent } from "./signin/signin.component";
+import { SignInUserComponent } from "./sign-in-user/sign-in-user.component";
 export const AUTH_ROUTE: Route[] = [
   {
     path: "",
@@ -10,6 +11,10 @@ export const AUTH_ROUTE: Route[] = [
   {
     path: "signin",
     component: SigninComponent,
+  },
+  {
+    path: "sign-in-user",
+    component: SignInUserComponent,
   },
   {
     path: "page404",

@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
-import { ProjectsService } from './projects.service';
+import { HealtCentersService } from './healt-centers.service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -21,7 +21,7 @@ import { DateTime } from "luxon";
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-projects',
+  selector: 'app-healt-centers',
   standalone: true,
   imports: [
     CommonModule,
@@ -39,10 +39,10 @@ import { Router } from '@angular/router';
     MatDialogModule,
     MatProgressSpinnerModule
   ],
-  templateUrl: './projects.component.html',
-  styleUrl: './projects.component.scss'
+  templateUrl: './healt-centers.component.html',
+  styleUrl: './healt-centers.component.scss'
 })
-export class ProjectsComponent implements OnInit {
+export class HealtCentersComponent implements OnInit {
   displayedColumns: string[] = [
     'name',
     'fecha_de_creacion',
@@ -51,7 +51,7 @@ export class ProjectsComponent implements OnInit {
 
   breadscrums = [
     {
-      title: 'Gestión de proyectos',
+      title: 'Gestión centros de salud',
       items: [],
       active: 'Datos básicos'
     }
@@ -81,7 +81,7 @@ export class ProjectsComponent implements OnInit {
 
   constructor(
     private readonly _formBuilder: FormBuilder,
-    private readonly projectService: ProjectsService,
+    private readonly _healtCentersService: HealtCentersService,
     private readonly dialogModel: MatDialog,
     private readonly _snackBar: MatSnackBar,
     private router: Router
@@ -119,7 +119,7 @@ export class ProjectsComponent implements OnInit {
   // Obtiene todos los projectos asociados al proyecto
   private getAllProjects(filters?: any) {
     this.isLoading = true;
-    this.projectService.getAllProjects(filters).subscribe({
+    this._healtCentersService.getAll(filters).subscribe({
       next: (response) => {
         this.projectsList = response.projects;
         this.dataSource.data = response.projects;
@@ -157,7 +157,7 @@ export class ProjectsComponent implements OnInit {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        this.projectService.deleteProject(id).subscribe({
+        this._healtCentersService.delete(id).subscribe({
           next: (response) => {
             this._snackBar.open(response.message, 'Cerrar', {
               duration: 5000,
@@ -179,8 +179,8 @@ export class ProjectsComponent implements OnInit {
     });
   }
 
-  viewDetailByProject(projectId: number) {
-    this.router.navigate([`/pages/projects/${projectId}`])
+  viewDetailByHealtCenter(projectId: number) {
+    this.router.navigate([`/pages/healt-centers/${projectId}`])
   }
 
   formatDate(date: string) {

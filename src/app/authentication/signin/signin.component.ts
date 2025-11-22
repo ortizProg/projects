@@ -52,12 +52,12 @@ export class SigninComponent implements OnInit {
   onSubmit() {
     this.submitted = true;
     this.error = '';
-  
+
     if (this.authForm.invalid) {
       Swal.fire('Error', 'Usuario y contraseña no válidos.', 'error');
       return;
     }
-  
+
     this.authService
       .login(this.authForm.get('username')?.value, this.authForm.get('password')?.value)
       .subscribe({
@@ -65,13 +65,13 @@ export class SigninComponent implements OnInit {
           if (res?.token) {
             // Guardar el token
             sessionStorage.setItem('accessToken', res.token);
-  
+
             // Mostrar en consola para depuración
             console.log('Token recibido:', res.token);
-  
+
             // Actualizar el usuario en AuthService
             this.authService.setToken(res.token);
-  
+
             Swal.fire({
               title: 'Inicio de sesión exitoso',
               text: 'Redirigiendo al dashboard...',

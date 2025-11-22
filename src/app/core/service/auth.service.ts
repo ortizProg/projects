@@ -128,7 +128,7 @@ export class AuthService {
    * @param token
    */
   logout() {
-    sessionStorage.removeItem('token');
+    sessionStorage.removeItem('accessToken');
     this.router.navigate(['/authentication/signin'], {
       queryParams: {},
     });

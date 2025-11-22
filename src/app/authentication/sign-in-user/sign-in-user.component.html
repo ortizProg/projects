@@ -1,0 +1,76 @@
+<div class="d-flex flex-column min-vh-100 w-100 position-relative overflow-hidden">
+
+  <!-- Main -->
+  <main class="flex-grow-1 d-flex align-items-center justify-content-center p-4 bg-light">
+    <div class="container-lg">
+      <div class="row g-0 shadow-lg rounded-4 overflow-hidden bg-white">
+
+        <!-- Imagen lateral -->
+        <div class="col-md-6 d-none d-md-flex flex-column align-items-center justify-content-center p-4 bg-light">
+          <div class="w-100 ratio ratio-1x1 rounded-3"
+               style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDDE0U0RCcVExKgVyjwkbl1cAMQvOmI0kiOmYJQ6J12HFAinUcpi0X1eUZnAVsTbz-WQEg7FY573QOwTW7gaE0h229bP-tX0VPCaGSmq6-NE9gZwXfmybxSZX9Lvl0bJB0OHDrcQgdRdMT_Ccka6VOOE1kUNEnRIN5dDWqI7b9B3nIeMJRUCBXWvQ85G-RJrTYc46ZuvkwY2WaLVtRfjDy0X0qJcKS_6oP4nKlaThjnqPFywfkzloDjVWeJae6nCmg0bIc7V4wLIDLg');
+                      background-size: cover; background-position: center;"></div>
+
+          <div class="mt-4 text-center">
+            <h3 class="fw-bold fs-4 text-dark">Tu salud en tus manos</h3>
+            <p class="text-muted small mt-2">
+              Acceda a su historial médico en cualquier momento y en cualquier lugar, con total seguridad y privacidad.
+            </p>
+          </div>
+        </div>
+
+        <!-- Formulario -->
+        <div class="col-12 col-md-6 d-flex flex-column justify-content-center p-4 p-sm-5">
+          <div class="mb-4">
+            <p class="fs-3 fw-bold lh-sm mb-2 text-dark">
+              Control de seguridad de tus datos médicos
+            </p>
+            <p class="text-muted mb-0">
+              Por favor ingrese su número de documento y fecha de expedición para continuar.
+            </p>
+          </div>
+
+          <form [formGroup]="authForm" class="d-flex flex-column gap-4">
+            <!-- ID -->
+            <div class="mb-3">
+              <label class="form-label fw-medium small mb-1">Número de identificación</label>
+              <div class="position-relative">
+                <span class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y ms-2 text-secondary">badge</span>
+                <input type="text" class="form-control ps-5 py-2" placeholder="Ingrese su número de identificación" formControlName="id">
+              </div>
+            </div>
+
+            <!-- Fecha -->
+            <div class="mb-3">
+              <label class="form-label fw-medium small mb-1">Fecha de expedición</label>
+              <div class="position-relative">
+                <span class="material-symbols-outlined position-absolute top-50 start-0 translate-middle-y ms-2 text-secondary">calendar_month</span>
+                <input type="date" class="form-control ps-5 py-2" formControlName="expeditionDate"/>
+              </div>
+            </div>
+
+            <!-- Botón -->
+            <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2 py-2 fw-semibold" (click)="onSubmit()">
+              <span class="material-symbols-outlined">lock_open</span>
+              Acceder a mi historial
+            </button>
+
+            <div class="text-center">
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-4 small text-muted bg-white border-top">
+    <div class="d-flex justify-content-center gap-2">
+      <a href="#" class="text-decoration-none text-primary">Politica de privacidad</a>
+      <span>·</span>
+      <a href="#" class="text-decoration-none text-primary">Terminos y condiciones</a>
+    </div>
+    <p class="mt-2 mb-0">© 2025 PCHC. Todos los derechos reservados.</p>
+  </footer>
+</div>
