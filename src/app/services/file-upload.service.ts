@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 export class FileUploadService {
 
   // TODO: Update this with the actual endpoint from environment or config
-  private apiUrl = 'http://localhost:3000/api/upload'; 
+  private apiUrl = 'http://localhost:3000/api/v1/clinical-histories'; 
 
   constructor(private http: HttpClient) { }
 
