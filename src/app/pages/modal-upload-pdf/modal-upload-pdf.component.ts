@@ -104,7 +104,10 @@ export class ModalUploadPdfComponent implements OnInit {
     }
 
     this.isUploading = true;
-    const metadata = this.uploadForm.value;
+    const metadata = {
+      ...this.uploadForm.value,
+      numero_documento: this.data.documentNumber
+    };
     
     this.fileUploadService.uploadFile(this.selectedFile, metadata).subscribe({
       next: (response) => {

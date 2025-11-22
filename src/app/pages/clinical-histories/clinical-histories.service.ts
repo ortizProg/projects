@@ -103,4 +103,14 @@ export class ClinicalHistoriesService {
     return this.http.get<any>(endpoint)
   }
 
+  /**
+   * Obtiene las historias clinicas de un paciente por su numero de documento
+   * @param documentNumber
+   * @returns
+   */
+  getHistoryByPatientId(documentNumber: number): Observable<any> {
+    const endpoint = `${this.urlBaseServices}/api/v1/clinical-histories/patient/${documentNumber}`;
+    return this.http.get<any>(endpoint);
+  }
+
 }

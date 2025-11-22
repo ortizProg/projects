@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { ClinicalHistoriesService } from './clinical-histories.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -87,6 +88,7 @@ export class ClinicalHistoriesComponent implements OnInit {
   constructor(
     private readonly _formBuilder: FormBuilder,
     private readonly _healtCentersService: HealtCentersService,
+    private readonly _clinicalHistoriesService: ClinicalHistoriesService,
     private readonly dialogModel: MatDialog,
     private readonly _snackBar: MatSnackBar,
     private router: Router,
@@ -125,39 +127,25 @@ export class ClinicalHistoriesComponent implements OnInit {
   // Obtiene todos los projectos asociados al proyecto
   private getAllProjects(filters?: any) {
     this.isLoading = true;
-    this._healtCentersService.getAll(filters).subscribe({
-      next: (response) => {
-
-        const data = [
-          {
-            id: 1,
-            centro_salud: 'Sura 30 de Agosto',
-            descripcion: 'Consulta por operación de mano',
-            fecha_de_consulta: '2025-06-03T22:51:32.918Z',
-          },
-          {
-            id: 2,
-            centro_salud: 'Sura 30 de Agosto',
-            descripcion: 'Consulta post operatoria',
-            fecha_de_consulta: '2025-05-03T22:51:32.918Z',
-          },
-          {
-            id: 3,
-            centro_salud: 'Idime Dosquebradas',
-            descripcion: 'Consulta por accidente laboral',
-            fecha_de_consulta: '2025-03-03T22:51:32.918Z',
-          }
-        ];
-
-        this.projectsList = data;
-        this.dataSource.data = data;
-        this.dataSource.paginator = this.paginator;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    })
+    if (this.documentNumber) {
+      this._clinicalHistoriesService.getHistoryByPatientId(this.documentNumber).subscribe({
+        next: (response) => {
+          this.projectsList = response;
+          this.dataSource.data = response;
+          this.dataSource.paginator = this.paginator;
+          this.isLoading = false;
+        },
+        error: () => {
+          this.isLoading = false;
+          this._snackBar.open('Error al cargar las historias clínicas', 'Cerrar', {
+            duration: 5000,
+            panelClass: ['error-snackbar']
+          });
+        }
+      });
+    } else {
+      this.isLoading = false;
+    }
   }
 
   // Abre el modal para abrir el formulario
@@ -176,7 +164,9 @@ export class ClinicalHistoriesComponent implements OnInit {
       // Si no hay ID, es creación/subida, usamos el nuevo modal de PDF
       const dialogRef = this.dialogModel.open(ModalUploadPdfComponent, {
         width: '600px',
-        data: {}
+        data: {
+          documentNumber: this.documentNumber
+        }
       });
 
       dialogRef.afterClosed().subscribe((result) => {
@@ -223,8 +213,14 @@ export class ClinicalHistoriesComponent implements OnInit {
     });
   }
 
-  viewDetailByHealtCenter(id: number) {
-    this.router.navigate([`/pages/clinical-history/${id}`])
+  viewDetailByHealtCenter(element: any) {
+    if (element.archivo_url) {
+      window.open(element.archivo_url, '_blank');
+    } else {
+      this._snackBar.open('No hay archivo PDF disponible', 'Cerrar', {
+        duration: 3000
+      });
+    }
   }
 
   formatDate(date: string) {

@@ -19,6 +19,7 @@ export class FileUploadService {
     formData.append('nombre', metadata.nombre);
     formData.append('fecha', metadata.fecha);
     formData.append('centro_salud_id', metadata.centro_salud_id);
+    formData.append('numero_documento', metadata.numero_documento);
 
     return this.http.post(this.apiUrl, formData);
   }
