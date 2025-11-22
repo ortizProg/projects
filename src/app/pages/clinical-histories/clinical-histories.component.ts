@@ -16,6 +16,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import Swal from 'sweetalert2';
 import { ModalProjectComponent } from '../modal-project/modal-project.component';
+import { ModalUploadPdfComponent } from '../modal-upload-pdf/modal-upload-pdf.component';
 import { DateTime } from "luxon";
 import { ActivatedRoute, Router } from '@angular/router';
 import { HealtCentersService } from '../healt-centers/healt-centers.service';
@@ -37,7 +38,8 @@ import { HealtCentersService } from '../healt-centers/healt-centers.service';
     MatTableModule,
     MatPaginatorModule,
     MatDialogModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ModalUploadPdfComponent
   ],
   templateUrl: './clinical-histories.component.html',
   styleUrl: './clinical-histories.component.scss'
@@ -160,13 +162,29 @@ export class ClinicalHistoriesComponent implements OnInit {
 
   // Abre el modal para abrir el formulario
   openModal(id?: number) {
-    const dialogRef = this.dialogModel.open(ModalProjectComponent, {
-      data: {id} // Puedes enviar datos iniciales al modal
-    });
+    if (id) {
+      // Si hay ID, es edición, usamos el modal de proyecto (o el que corresponda para editar)
+      // Asumiendo que la edición sigue usando ModalProjectComponent o similar
+      const dialogRef = this.dialogModel.open(ModalProjectComponent, {
+        data: {id}
+      });
 
-    dialogRef.afterClosed().subscribe(() => {
-      this.getAllProjects();
-    })
+      dialogRef.afterClosed().subscribe(() => {
+        this.getAllProjects();
+      })
+    } else {
+      // Si no hay ID, es creación/subida, usamos el nuevo modal de PDF
+      const dialogRef = this.dialogModel.open(ModalUploadPdfComponent, {
+        width: '600px',
+        data: {}
+      });
+
+      dialogRef.afterClosed().subscribe((result) => {
+        if (result) {
+          this.getAllProjects();
+        }
+      })
+    }
   }
 
   //Elimina un proyecto
