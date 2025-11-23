@@ -50,6 +50,7 @@ export class ClinicalHistoriesComponent implements OnInit {
 
   displayedColumns: string[] = [
     'centro_salud',
+    'doctor',
     'fecha_de_consulta',
     'descripcion',
     'action'

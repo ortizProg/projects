@@ -48,21 +48,26 @@
                 </ul>
               </div>
             </div>
-
             <!-- Tabla existente -->
             <table class="table-responsive" mat-table [dataSource]="dataSource">
               <mat-spinner *ngIf="isLoading" class="loading-spinner"></mat-spinner>
 
               <!-- Columna ID -->
               <ng-container matColumnDef="centro_salud">
-                <th mat-header-cell *matHeaderCellDef width="25%">Centro de salud</th>
+                <th mat-header-cell *matHeaderCellDef>Centro de salud</th>
                 <td mat-cell *matCellDef="let element">{{ element.centro_salud?.nombre || element.centro_salud_id }}
                 </td>
               </ng-container>
 
+              <!-- Columna Doctor -->
+              <ng-container matColumnDef="doctor">
+                <th mat-header-cell *matHeaderCellDef>Doctor</th>
+                <td mat-cell *matCellDef="let element">{{ element.doctor?.nombre }}</td>
+              </ng-container>
+
               <!-- Columna description -->
               <ng-container matColumnDef="descripcion">
-                <th mat-header-cell *matHeaderCellDef width="25%">Descripción</th>
+                <th mat-header-cell *matHeaderCellDef>Descripción</th>
                 <td mat-cell *matCellDef="let element">{{ element.nombre }}</td>
               </ng-container>
 
