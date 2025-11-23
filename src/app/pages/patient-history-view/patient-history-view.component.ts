@@ -1,8 +1,8 @@
 import { Direction, BidiModule } from '@angular/cdk/bidi';
-import { AfterViewInit, Component, Inject, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { InConfiguration } from '@core';
 import { ConfigService } from '@config';
-import { DOCUMENT } from '@angular/common';
+import { DOCUMENT, CommonModule } from '@angular/common';
 import { Router, RouterOutlet } from '@angular/router';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 
@@ -11,12 +11,15 @@ selector: 'app-patient-history-view',
   templateUrl: './patient-history-view.component.html',
   styleUrls: [],
   standalone: true,
+  imports: [
+    CommonModule
+  ]
 })
 export class PatientHistoryViewComponent {
-  ngAfterViewInit(): void {
-  }
 
-  constructor(private router: Router){}
+  constructor(
+    private router: Router
+  ){}
 
   back() {
     this.router.navigate(['/patient'])

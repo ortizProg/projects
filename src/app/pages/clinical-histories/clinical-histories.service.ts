@@ -109,8 +109,11 @@ export class ClinicalHistoriesService {
    * @returns
    */
   getHistoryByPatientId(documentNumber: number): Observable<any> {
-    const endpoint = `${this.urlBaseServices}/api/v1/clinical-histories/patient/${documentNumber}`;
-    return this.http.get<any>(endpoint);
+    return this.http.get(`${this.urlBaseServices}/api/v1/clinical-histories/patient/${documentNumber}`);
+  }
+
+  getMyHistories(): Observable<any> {
+    return this.http.get(`${this.urlBaseServices}/api/v1/clinical-histories/my-histories`);
   }
 
 }
