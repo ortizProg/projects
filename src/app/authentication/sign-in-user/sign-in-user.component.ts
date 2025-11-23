@@ -50,11 +50,39 @@ export class SignInUserComponent implements OnInit {
   }
 
   onSubmit() {
-    if(this.submitted) return;
-    if(this.authForm.invalid) return;
+    if (this.authForm.invalid) {
+      this.authForm.markAllAsTouched();
+      return;
+    }
     this.submitted = true;
-    sessionStorage.setItem('patient', JSON.stringify(this.authForm.value));
-    this.router.navigate(['/patient'])
+    this.loading = true;
+    
+    const { id, expeditionDate } = this.authForm.value;
+    // Formatear fecha si es necesario, asumiendo que el input date devuelve YYYY-MM-DD
+    // Si es un objeto Date, convertirlo a string
+    let formattedDate = expeditionDate;
+    if (expeditionDate instanceof Date) {
+        formattedDate = expeditionDate.toISOString().split('T')[0];
+    }
+
+    this.authService.loginPatient(id, formattedDate).subscribe({
+      next: (res) => {
+        this.loading = false;
+        sessionStorage.setItem('accessToken', res.token);
+        // Redirigir a la página de historias clínicas del paciente
+        this.router.navigate([`/patient`]);
+      },
+      error: (error) => {
+        this.loading = false;
+        this.submitted = false;
+        this.error = error.error?.message || 'Error al iniciar sesión';
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: this.error
+        });
+      }
+    });
   }
 
 

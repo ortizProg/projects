@@ -34,6 +34,11 @@ export class AuthService {
     return this.http.post<any>(endpoint, { email, password });
   }
 
+  loginPatient(numero_documento: string, fecha_expedicion: string): Observable<any> {
+    const endpoint = `${this.urlBaseServices}/api/v1/auth/login-patient`;
+    return this.http.post<any>(endpoint, { numero_documento, fecha_expedicion });
+  }
+
   /**
    * Verifica si existe el acccessToken en el session storage
    */
