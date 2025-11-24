@@ -78,15 +78,7 @@ export class ModalUploadPdfComponent implements OnInit {
   loadHealthCenters() {
     this.healthCentersService.getAll({}).subscribe({
       next: (res) => {
-        // Assuming the response structure based on previous files, might need adjustment
-        // The service returns an object, let's assume the list is in 'projects' or similar based on HealtCentersService.getAll
-        // Looking at HealtCentersService.getAll, it returns this.http.get<any>(endpoint, {params})
-        // And ClinicalHistoriesComponent uses response directly.
-        // Let's assume response is an array or has a property.
-        // In ClinicalHistoriesComponent: this.projectsList = data; (mocked)
-        // But the service calls the API.
-        // Let's assume standard response format.
-        this.healthCenters = res.projects || res; // Fallback
+        this.healthCenters = res.projects || res;
       },
       error: (err) => {
         console.error('Error loading health centers', err);
