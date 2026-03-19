@@ -1,7 +1,7 @@
 export const environment = {
     production: true,
     appVersion: 'v1.0.0',
-    urlServicios: 'http://localhost:3000',
+    urlServicios: 'http://159.89.149.223',
     logoutTimeout: 900000,
     environment: 'production',
 }
